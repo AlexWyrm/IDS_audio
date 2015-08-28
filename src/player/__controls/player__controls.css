@@ -1,0 +1,7 @@
+.player .player__controls {
+    margin-top: 20px;
+}
+
+.player .player__controls button {
+    margin: 10px;
+}
