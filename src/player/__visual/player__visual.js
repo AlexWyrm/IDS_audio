@@ -1,7 +1,8 @@
 var drawVisualisation = function (player) {
-    var canvas = player.visual.find('canvas');
-    var width = canvas.width(), height = canvas.height();
-    var canvasCtx = canvas.get()[0].getContext("2d");
+    var canvas = player.visual.find('canvas').get(0);
+    var width = canvas.clientWidth, height = canvas.clientHeight;
+    canvas.width = width, canvas.height = height;
+    var canvasCtx = canvas.getContext("2d");
 
     player.analyser.fftSize = 2048;
     var bufferLength = player.analyser.frequencyBinCount;
@@ -26,13 +27,12 @@ var drawVisualisation = function (player) {
 
         canvasCtx.beginPath();
 
-        var sliceWidth = width * 1.0 / bufferLength;
+        var sliceWidth = width / (bufferLength - 1);
         var x = 0;
 
-        for (var i = 0; i < bufferLength; i++) {
+        for (var i = 0; i < bufferLength - 1; i++) {
 
-            var v = dataArray[i] / 128.0;
-            var y = v * height / 2;
+            var y = dataArray[i] / 256.0 * height;
 
             if (i === 0) {
                 canvasCtx.moveTo(x, y);
@@ -43,7 +43,6 @@ var drawVisualisation = function (player) {
             x += sliceWidth;
         }
 
-        canvasCtx.lineTo(width, height / 2);
         canvasCtx.stroke();
     };
 
